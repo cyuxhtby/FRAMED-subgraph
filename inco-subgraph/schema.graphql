@@ -1,0 +1,21 @@
+type Game @entity {
+  id: ID!
+  players: [Player!]!
+  gamestate: String!
+  votes: [Vote!]!
+  mafia: Bytes!
+  actions: Int!
+  winner: String!
+}
+
+type Player @entity {
+  id: ID!
+  games: [Game!]!
+}
+
+type Vote @entity {
+  id: ID!
+  votes: Int!
+  player: Player!
+  game: Game!
+}
