@@ -33,4 +33,4 @@ lcov.info
 .postgres
 logfile
 
-inco-subgraph/node_modules
+/subgraph/node_modules
