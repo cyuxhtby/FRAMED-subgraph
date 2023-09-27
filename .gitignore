@@ -32,3 +32,5 @@ lcov.info
 # Docker volumes and debug logs
 .postgres
 logfile
+
+inco-subgraph/node_modules
