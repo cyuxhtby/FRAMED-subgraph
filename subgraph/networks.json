@@ -1,8 +1,8 @@
 {
   "inco-tesnet": {
     "Mafia": {
-      "address": "0x00A96e08aEaA0B9477A05B64476a0Af318E2eeD5",
-      "startBlock": 17800,
+      "address": "0xf3DFC5Bf5B20D546ab36AB315204C75b55EaFf33",
+      "startBlock": 14756,
       "chainId": 9000
     }
   }

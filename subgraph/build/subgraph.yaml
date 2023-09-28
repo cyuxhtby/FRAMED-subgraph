@@ -1,14 +1,14 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Mafia
     network: IncoTestnet
     source:
-      address: "0xAbb4228c846909b83f9D56E67460De99671dB7c7" 
+      address: "0xAbb4228c846909b83f9D56E67460De99671dB7c7"
       abi: Mafia
-      startBlock: 32094 
+      startBlock: 32094
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -17,7 +17,7 @@ dataSources:
         - JoinGame
       abis:
         - name: Mafia
-          file: ./abis/Mafia.json 
+          file: Mafia/abis/Mafia.json
       eventHandlers:
         - event: JoinGame(address,uint8)
           handler: handleJoinGame
@@ -35,5 +35,4 @@ dataSources:
           handler: handleKilled
         - event: NewState(uint8)
           handler: handleNewState
-
-      file: ./src/mappings.ts
+      file: Mafia/Mafia.wasm

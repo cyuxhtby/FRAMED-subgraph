@@ -9,7 +9,7 @@ import {
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { Approval } from "../generated/schema"
 import { Approval as ApprovalEvent } from "../generated/Test/Test"
-import { handleApproval } from "../src/test"
+import { handleApproval } from "../src/mappings"
 import { createApprovalEvent } from "./test-utils"
 
 // Tests structure (matchstick-as >=0.5.0)

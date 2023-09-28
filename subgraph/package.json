@@ -1,13 +1,13 @@
 {
-  "name": "inco-subgraph",
+  "name": "subgraph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node http://localhost:8020 mafia/inco-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ mafia/inco-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ mafia/inco-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 mafia/inco-subgraph",
+    "deploy": "graph deploy --node http://localhost:8020 mafia/subgraph",
+    "create-local": "graph create --node http://localhost:8020/ mafia/subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ mafia/subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 mafia/subgraph",
     "test": "graph test"
   },
   "dependencies": {
