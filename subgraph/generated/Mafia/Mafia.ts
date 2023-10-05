@@ -27,8 +27,8 @@ export class Action__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get _actionCount(): i32 {
-    return this._event.parameters[1].value.toI32();
+  get playersTakenAction(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
   }
 }
 
@@ -139,8 +139,8 @@ export class JoinGame__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get _playerId(): i32 {
-    return this._event.parameters[1].value.toI32();
+  get playerAddresses(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
   }
 }
 
@@ -158,6 +158,24 @@ export class Killed__Params {
   }
 
   get _playerKilled(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
+export class NewRound extends ethereum.Event {
+  get params(): NewRound__Params {
+    return new NewRound__Params(this);
+  }
+}
+
+export class NewRound__Params {
+  _event: NewRound;
+
+  constructor(event: NewRound) {
+    this._event = event;
+  }
+
+  get roundCount(): i32 {
     return this._event.parameters[0].value.toI32();
   }
 }
@@ -385,6 +403,21 @@ export class Mafia extends ethereum.SmartContract {
     return new Mafia("Mafia", address);
   }
 
+  MAX_PLAYERS(): i32 {
+    let result = super.call("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_MAX_PLAYERS(): ethereum.CallResult<i32> {
+    let result = super.tryCall("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   actionCount(): i32 {
     let result = super.call("actionCount", "actionCount():(uint8)", []);
 
@@ -479,21 +512,30 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
-  hasTakenAction(param0: Address): boolean {
+  hasTakenAction(param0: i32, param1: Address): boolean {
     let result = super.call(
       "hasTakenAction",
-      "hasTakenAction(address):(bool)",
-      [ethereum.Value.fromAddress(param0)]
+      "hasTakenAction(uint8,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromAddress(param1)
+      ]
     );
 
     return result[0].toBoolean();
   }
 
-  try_hasTakenAction(param0: Address): ethereum.CallResult<boolean> {
+  try_hasTakenAction(
+    param0: i32,
+    param1: Address
+  ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "hasTakenAction",
-      "hasTakenAction(address):(bool)",
-      [ethereum.Value.fromAddress(param0)]
+      "hasTakenAction(uint8,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromAddress(param1)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -502,17 +544,19 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  hasVoted(param0: Address): boolean {
-    let result = super.call("hasVoted", "hasVoted(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+  hasVoted(param0: i32, param1: Address): boolean {
+    let result = super.call("hasVoted", "hasVoted(uint8,address):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+      ethereum.Value.fromAddress(param1)
     ]);
 
     return result[0].toBoolean();
   }
 
-  try_hasVoted(param0: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall("hasVoted", "hasVoted(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+  try_hasVoted(param0: i32, param1: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall("hasVoted", "hasVoted(uint8,address):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+      ethereum.Value.fromAddress(param1)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -689,6 +733,25 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
+  playerKillCount(): i32 {
+    let result = super.call("playerKillCount", "playerKillCount():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_playerKillCount(): ethereum.CallResult<i32> {
+    let result = super.tryCall(
+      "playerKillCount",
+      "playerKillCount():(uint8)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   playerKilled(): i32 {
     let result = super.call("playerKilled", "playerKilled():(uint8)", []);
 
@@ -704,21 +767,27 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  playerVoteCount(param0: i32): i32 {
+  playerVoteCount(param0: i32, param1: i32): i32 {
     let result = super.call(
       "playerVoteCount",
-      "playerVoteCount(uint8):(uint8)",
-      [ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0))]
+      "playerVoteCount(uint8,uint8):(uint8)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+      ]
     );
 
     return result[0].toI32();
   }
 
-  try_playerVoteCount(param0: i32): ethereum.CallResult<i32> {
+  try_playerVoteCount(param0: i32, param1: i32): ethereum.CallResult<i32> {
     let result = super.tryCall(
       "playerVoteCount",
-      "playerVoteCount(uint8):(uint8)",
-      [ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0))]
+      "playerVoteCount(uint8,uint8):(uint8)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -783,6 +852,29 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  playersTakenActions(param0: BigInt): Address {
+    let result = super.call(
+      "playersTakenActions",
+      "playersTakenActions(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_playersTakenActions(param0: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "playersTakenActions",
+      "playersTakenActions(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   savedPlayerId(): BigInt {
     let result = super.call("savedPlayerId", "savedPlayerId():(uint256)", []);
 
@@ -795,25 +887,6 @@ export class Mafia extends ethereum.SmartContract {
       "savedPlayerId():(uint256)",
       []
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  target(param0: Address): BigInt {
-    let result = super.call("target", "target(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_target(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("target", "target(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
-    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -934,6 +1007,32 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class _resetDayCall extends ethereum.Call {
+  get inputs(): _resetDayCall__Inputs {
+    return new _resetDayCall__Inputs(this);
+  }
+
+  get outputs(): _resetDayCall__Outputs {
+    return new _resetDayCall__Outputs(this);
+  }
+}
+
+export class _resetDayCall__Inputs {
+  _call: _resetDayCall;
+
+  constructor(call: _resetDayCall) {
+    this._call = call;
+  }
+}
+
+export class _resetDayCall__Outputs {
+  _call: _resetDayCall;
+
+  constructor(call: _resetDayCall) {
     this._call = call;
   }
 }
@@ -1076,36 +1175,6 @@ export class JoinGameCall__Outputs {
   _call: JoinGameCall;
 
   constructor(call: JoinGameCall) {
-    this._call = call;
-  }
-}
-
-export class NewGameCall extends ethereum.Call {
-  get inputs(): NewGameCall__Inputs {
-    return new NewGameCall__Inputs(this);
-  }
-
-  get outputs(): NewGameCall__Outputs {
-    return new NewGameCall__Outputs(this);
-  }
-}
-
-export class NewGameCall__Inputs {
-  _call: NewGameCall;
-
-  constructor(call: NewGameCall) {
-    this._call = call;
-  }
-
-  get roles(): Array<Bytes> {
-    return this._call.inputValues[0].value.toBytesArray();
-  }
-}
-
-export class NewGameCall__Outputs {
-  _call: NewGameCall;
-
-  constructor(call: NewGameCall) {
     this._call = call;
   }
 }

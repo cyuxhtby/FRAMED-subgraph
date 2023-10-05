@@ -4,35 +4,22 @@ schema:
 dataSources:
   - kind: ethereum
     name: Mafia
-    network: IncoTestnet
+    network: inconetwork
     source:
-      address: "0xAbb4228c846909b83f9D56E67460De99671dB7c7"
+      address: "0xAC5f4E555c811d7C50790E0426B7354f652CF975"
       abi: Mafia
-      startBlock: 32094
+      startBlock: 141092
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - JoinGame
+        - Game
+        - Player
       abis:
         - name: Mafia
           file: Mafia/abis/Mafia.json
       eventHandlers:
-        - event: JoinGame(address,uint8)
+        - event: JoinGame(address,address[])
           handler: handleJoinGame
-        - event: InitGame(uint8)
-          handler: handleInitGame
-        - event: Action(address,uint8)
-          handler: handleAction
-        - event: CastVote(address,uint8)
-          handler: handleCastVote
-        - event: Exiled(uint8)
-          handler: handleExiled
-        - event: CheckMafia(bool)
-          handler: handleCheckMafia
-        - event: Killed(uint8)
-          handler: handleKilled
-        - event: NewState(uint8)
-          handler: handleNewState
       file: Mafia/Mafia.wasm
