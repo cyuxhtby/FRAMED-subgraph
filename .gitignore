@@ -37,3 +37,4 @@ logfile
 
 /subgraph/node_modules
 /subgraph/yarn.lock
+package-lock.json
