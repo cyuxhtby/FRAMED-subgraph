@@ -1,0 +1,10 @@
+type Player @entity {
+  id: ID!
+  playerAddress: Bytes!
+}
+
+type Game @entity {
+  id: ID!
+  address: Bytes!
+  players: [Player!]!
+}
