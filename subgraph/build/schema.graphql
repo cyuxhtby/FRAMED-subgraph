@@ -1,53 +1,10 @@
 type Player @entity {
   id: ID!
-  playerId: Int!
   playerAddress: Bytes!
-  role: Int!
-  alive: Boolean!
-}
-
-type JoinGame @entity {
-  id: ID!
-  playerAddress: Bytes!
-  playerId: Int
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
 }
 
 type Game @entity {
   id: ID!
-  gameCount: Int
-  gameState: Int
-  playerKilled: Int
-  largestVoteCount: Int
-  playerIdWithLargestVoteCount: Int
-  actionCount: Int
-  voteCount: Int
-  isMafiaKilled: Int
-  tieExists: Boolean
-}
-
-type Action @entity {
-  id: ID!
-  playerAddress: Bytes!
-  actionCount: Int!
-}
-
-type Vote @entity {
-  id: ID!
-  voter: Bytes!
-  playerId: Int!
-  voteCount: Int!
-}
-
-type Exile @entity {
-  id: ID!
-  playerExiled: Int!
-}
-
-type Investigation @entity {
-  id: ID!
-  isCaught: Boolean!
-  investigatedPlayerId: Int!
+  address: Bytes!
+  players: [Player!]!
 }

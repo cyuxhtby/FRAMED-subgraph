@@ -36,3 +36,4 @@ lcov.info
 logfile
 
 /subgraph/node_modules
+/subgraph/yarn.lock
