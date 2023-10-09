@@ -3,12 +3,31 @@ schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum
+    name: Contract
+    network: inconetwork
+    source:
+      address: "0x2Cfa03ca98cda65aB803E676d97Aa22c156D03f3"
+      abi: Contract
+      startBlock: 181351
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - InitGame
+      abis:
+        - name: Contract
+          file: Contract\abis\Contract.json
+      eventHandlers:
+        - event: InitGame(address,uint256)
+          handler: handleInitGame
+      file: Contract\Contract.wasm
+templates:
+  - kind: ethereum
     name: Mafia
     network: inconetwork
     source:
-      address: "0xAC5f4E555c811d7C50790E0426B7354f652CF975"
       abi: Mafia
-      startBlock: 141092
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -18,8 +37,8 @@ dataSources:
         - Player
       abis:
         - name: Mafia
-          file: Mafia/abis/Mafia.json
+          file: Mafia\abis\Mafia.json
       eventHandlers:
         - event: JoinGame(address,address[])
           handler: handleJoinGame
-      file: Mafia/Mafia.wasm
+      file: templates\Mafia\Mafia.wasm

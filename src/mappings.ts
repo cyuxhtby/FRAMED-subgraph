@@ -1,4 +1,3 @@
-import { Address } from "@graphprotocol/graph-ts";
 import {
   JoinGame as JoinGameEvent,
   InitGame as InitGameEvent,
@@ -13,28 +12,63 @@ import {
   // JoinGame,
   Player,
   Game,
+  PlayerGame,
   // Action,
   // Vote,
   // Exile,
   // Investigation
 } from "../generated/schema";
 
+// export function handleJoinGame(event: JoinGameEvent): void {
+//   let gameRoom = new Game("id-placeholder");
+//   // gameRoom.set(pla)
+//   let p = ["a", "b"];
+//   gameRoom.players = p;
+//   // entity.playerAddress = event.params._playerAddress;
+//   // entity.blockNumber = event.block.number;
+//   // entity.blockTimestamp = event.block.timestamp;
+//   // // entity.transactionHash = event.transaction.hash;
+
+//   // if (event.params._playerId != null) {
+//   //   gameRoom.playerId = event.params._playerId;
+//   // }
+
+//   gameRoom.save();
+// }
 export function handleJoinGame(event: JoinGameEvent): void {
-  let gameRoom = new Game("id-placeholder");
-  // gameRoom.set(pla)
-  let p = ["a", "b"];
-  gameRoom.players = p;
-  // entity.playerAddress = event.params._playerAddress;
-  // entity.blockNumber = event.block.number;
-  // entity.blockTimestamp = event.block.timestamp;
-  // // entity.transactionHash = event.transaction.hash;
+  let player = Player.load(event.transaction.from.toHexString());
+  let gameRoom = Game.load(event.address.toHexString());
 
-  // if (event.params._playerId != null) {
-  //   gameRoom.playerId = event.params._playerId;
-  // }
-
-  gameRoom.save();
+  if (gameRoom) {
+    if (player) {
+      let playerGameId = player.id
+        .concat("-")
+        .concat(gameRoom.roomId.toString());
+      let playerGame = new PlayerGame(playerGameId);
+      playerGame.player = player.id;
+      playerGame.game = gameRoom.id;
+      playerGame.save();
+    } else {
+      player = new Player(event.transaction.from.toHexString());
+      let playerGameId = player.id
+        .concat("-")
+        .concat(gameRoom.roomId.toString());
+      let playerGame = new PlayerGame(playerGameId);
+      playerGame.player = player.id;
+      playerGame.game = gameRoom.id;
+      playerGame.save();
+      player.save();
+    }
+  }
 }
+
+// export function handleInitGame(event: InitGameEvent): void {
+//   let gameRoom = new Game(event.params._gameCount.toString());
+//   gameRoom.state = "created";
+//   gameRoom.creator = event.transaction.from.toHexString();
+
+//   gameRoom.save();
+// }
 
 // export function handleInitGame(event: InitGameEvent): void {
 //   let entity = new Game(event.params._gameCount.toString());
