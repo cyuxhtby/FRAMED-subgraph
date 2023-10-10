@@ -16,8 +16,10 @@ export function handleInitGame(event: InitGameEvent): void {
   // context.setBigInt("roomId", event.params.roomId);
   Mafia.create(event.params.room);
   let gameRoom = new Game(event.params.room.toHexString());
-  gameRoom.state = "created";
+  gameRoom.phase = 0;
+  gameRoom.size = 4;
   gameRoom.creator = event.transaction.from.toHexString();
   gameRoom.roomId = event.params.roomId.toI32();
+  gameRoom.actionCount = 0;
   gameRoom.save();
 }

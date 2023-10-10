@@ -64,6 +64,8 @@ templates:
       eventHandlers:
         - event: JoinGame(address,address[])
           handler: handleJoinGame
-        # - event: InitGame(uint8)
-        #   handler: handleInitGame
+        - event: InitGame(uint8)
+          handler: handleInitGame
+        - event: Action(address,address[])
+          handler: handleAction
       file: ./src/mappings.ts

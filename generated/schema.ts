@@ -107,17 +107,17 @@ export class Game extends Entity {
     this.set("roomId", Value.fromI32(value));
   }
 
-  get state(): string {
-    let value = this.get("state");
+  get phase(): i32 {
+    let value = this.get("phase");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return 0;
     } else {
-      return value.toString();
+      return value.toI32();
     }
   }
 
-  set state(value: string) {
-    this.set("state", Value.fromString(value));
+  set phase(value: i32) {
+    this.set("phase", Value.fromI32(value));
   }
 
   get creator(): string {
@@ -135,6 +135,32 @@ export class Game extends Entity {
 
   get Players(): PlayerGameLoader {
     return new PlayerGameLoader("Game", this.get("id")!.toString(), "Players");
+  }
+
+  get size(): i32 {
+    let value = this.get("size");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set size(value: i32) {
+    this.set("size", Value.fromI32(value));
+  }
+
+  get actionCount(): i32 {
+    let value = this.get("actionCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set actionCount(value: i32) {
+    this.set("actionCount", Value.fromI32(value));
   }
 }
 
@@ -201,6 +227,19 @@ export class PlayerGame extends Entity {
 
   set game(value: string) {
     this.set("game", Value.fromString(value));
+  }
+
+  get action(): boolean {
+    let value = this.get("action");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set action(value: boolean) {
+    this.set("action", Value.fromBoolean(value));
   }
 }
 

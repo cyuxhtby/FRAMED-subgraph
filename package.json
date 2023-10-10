@@ -7,7 +7,8 @@
     "deploy": "graph deploy --node http://51.20.67.199:8020 mafia/subgraph",
     "create-local": "graph create --node http://51.20.67.199:8020 mafia/subgraph",
     "remove-local": "graph remove --node http://51.20.67.199:8020 mafia/subgraph",
-    "deploy-local": "graph deploy --node http://51.20.67.199:8020 --ipfs http://51.20.67.199:5001 mafia/subgraph",
+    "deploy-local": "graph deploy --node http://51.20.67.199:8020 --ipfs http://51.20.67.199:5001 framed/subgraphtest",
+    "deploy-docker": "graph deploy --node http://localhost:8020 --ipfs http://localhost:5001 mafia/subgraph",
     "test": "graph test"
   },
   "dependencies": {

@@ -13,7 +13,6 @@ import {
   Player,
   Game,
   PlayerGame,
-  // Action,
   // Vote,
   // Exile,
   // Investigation
@@ -47,6 +46,7 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.action = false;
       playerGame.save();
     } else {
       player = new Player(event.transaction.from.toHexString());
@@ -56,12 +56,40 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.action = false;
       playerGame.save();
       player.save();
     }
   }
 }
 
+export function handleInitGame(event: InitGameEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+
+  if (gameRoom) {
+    gameRoom.phase = 1;
+    gameRoom.save();
+  }
+}
+
+export function handleAction(event: ActionEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+  let player = Player.load(event.params._playerAddress.toHexString());
+
+  if (gameRoom && player) {
+    let playerGameId = player.id.concat("-").concat(gameRoom.roomId.toString());
+    let playerGame = PlayerGame.load(playerGameId);
+    if (playerGame) {
+      playerGame.action = true;
+      gameRoom.actionCount++;
+      if (gameRoom.actionCount == gameRoom.size) {
+        gameRoom.phase = 2;
+      }
+      playerGame.save();
+    }
+    gameRoom.save();
+  }
+}
 // export function handleInitGame(event: InitGameEvent): void {
 //   let gameRoom = new Game(event.params._gameCount.toString());
 //   gameRoom.state = "created";

@@ -6,13 +6,16 @@ type Player @entity {
 type Game @entity {
   id: ID!
   roomId: Int!
-  state: String!
+  phase: Int!
   creator: String!
   Players: [PlayerGame!]! @derivedFrom(field: "game")
+  size: Int!
+  actionCount: Int!
 }
 
 type PlayerGame @entity {
   id: ID!
   player: Player!
   game: Game!
+  action: Boolean!
 }
