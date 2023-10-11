@@ -157,8 +157,8 @@ export class Killed__Params {
     this._event = event;
   }
 
-  get _playerKilled(): i32 {
-    return this._event.parameters[0].value.toI32();
+  get _playerKilled(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 }
 

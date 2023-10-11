@@ -21,5 +21,6 @@ export function handleInitGame(event: InitGameEvent): void {
   gameRoom.creator = event.transaction.from.toHexString();
   gameRoom.roomId = event.params.roomId.toI32();
   gameRoom.actionCount = 0;
+  gameRoom.voteCount = 0;
   gameRoom.save();
 }

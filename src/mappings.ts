@@ -7,6 +7,8 @@ import {
   CheckMafia as CheckMafiaEvent,
   Killed as KilledEvent,
   NewState as NewStateEvent,
+  Voted as VotedEvent,
+  Mafia,
 } from "../generated/Mafia/Mafia";
 import {
   // JoinGame,
@@ -18,22 +20,6 @@ import {
   // Investigation
 } from "../generated/schema";
 
-// export function handleJoinGame(event: JoinGameEvent): void {
-//   let gameRoom = new Game("id-placeholder");
-//   // gameRoom.set(pla)
-//   let p = ["a", "b"];
-//   gameRoom.players = p;
-//   // entity.playerAddress = event.params._playerAddress;
-//   // entity.blockNumber = event.block.number;
-//   // entity.blockTimestamp = event.block.timestamp;
-//   // // entity.transactionHash = event.transaction.hash;
-
-//   // if (event.params._playerId != null) {
-//   //   gameRoom.playerId = event.params._playerId;
-//   // }
-
-//   gameRoom.save();
-// }
 export function handleJoinGame(event: JoinGameEvent): void {
   let player = Player.load(event.transaction.from.toHexString());
   let gameRoom = Game.load(event.address.toHexString());
@@ -47,6 +33,8 @@ export function handleJoinGame(event: JoinGameEvent): void {
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
       playerGame.action = false;
+      playerGame.alive = true;
+      playerGame.vote = false;
       playerGame.save();
     } else {
       player = new Player(event.transaction.from.toHexString());
@@ -57,6 +45,8 @@ export function handleJoinGame(event: JoinGameEvent): void {
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
       playerGame.action = false;
+      playerGame.alive = true;
+      playerGame.vote = false;
       playerGame.save();
       player.save();
     }
@@ -90,63 +80,68 @@ export function handleAction(event: ActionEvent): void {
     gameRoom.save();
   }
 }
-// export function handleInitGame(event: InitGameEvent): void {
-//   let gameRoom = new Game(event.params._gameCount.toString());
-//   gameRoom.state = "created";
-//   gameRoom.creator = event.transaction.from.toHexString();
+export function handleVote(event: VotedEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+  let player = Player.load(event.params.voter.toHexString());
 
-//   gameRoom.save();
-// }
+  if (gameRoom && player) {
+    let playerGameId = player.id.concat("-").concat(gameRoom.roomId.toString());
+    let playerGame = PlayerGame.load(playerGameId);
+    if (playerGame) {
+      playerGame.vote = true;
+      gameRoom.voteCount++;
+      if (gameRoom.voteCount == gameRoom.size) {
+        gameRoom.phase = 3;
+      }
+      playerGame.save();
+    }
+    gameRoom.save();
+  }
+}
 
-// export function handleInitGame(event: InitGameEvent): void {
-//   let entity = new Game(event.params._gameCount.toString());
-//   entity.gameCount = event.params._gameCount;
-//   // Initialize other fields here
-//   entity.save();
-// }
+export function handleCheckMafia(event: CheckMafiaEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
 
-// export function handleAction(event: ActionEvent): void {
-//   let entity = new Action(
-//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-//   );
-//   entity.playerAddress = event.params._playerAddress;
-//   entity.actionCount = event.params._actionCount;
-//   entity.save();
-// }
+  if (gameRoom) {
+    if (event.params._mafiaKilled) {
+      gameRoom.phase = 4;
+    } else {
+      gameRoom.phase = 1;
+      gameRoom.size--;
+      gameRoom.voteCount = 0;
+      gameRoom.actionCount = 0;
+      let contract = Mafia.bind(event.address);
+      let playersArray = contract.getPlayersArray();
+      for (let i = 0; i < playersArray.length; i++) {
+        let playerId = playersArray[i];
+        let playerGameId = playerId
+          .toHexString()
+          .concat("-")
+          .concat(gameRoom.roomId.toString());
+        let playerGame = PlayerGame.load(playerGameId);
+        if (playerGame) {
+          playerGame.vote = false;
+          playerGame.action = false;
+          playerGame.save();
+        }
+      }
+    }
+    gameRoom.save();
+  }
+}
 
-// export function handleCastVote(event: CastVoteEvent): void {
-//   let entity = new Vote(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+export function handleKilled(event: KilledEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+  let player = Player.load(event.params._playerKilled.toHexString());
 
-//   entity.voter = event.params._voter;
-//   entity.playerId = event.params._playerId;
-//   entity.save();
-// }
+  if (gameRoom && player) {
+    let playerGameId = player.id.concat("-").concat(gameRoom.roomId.toString());
+    let playerGame = PlayerGame.load(playerGameId);
+    if (playerGame) {
+      playerGame.alive = false;
 
-// export function handleExiled(event: ExiledEvent): void {
-//   let entity = new Exile(
-//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-//   );
-//   entity.playerExiled = event.params._playerExiled;
-//   entity.save();
-// }
-
-// export function handleCheckMafia(event: CheckMafiaEvent): void {
-//   let entity = new Investigation(
-//     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-//   );
-//   entity.isCaught = event.params._mafiaKilled;
-//   entity.save();
-// }
-
-// export function handleKilled(event: KilledEvent): void {
-//   let entity = new Player(event.params._playerKilled.toString());
-//   entity.playerId = event.params._playerKilled;
-//   entity.alive = false;
-//   entity.save();
-// }
-
-// export function handleNewState(event: NewStateEvent): void {
-//   let entity = new Game(event.params.gameState.toString());
-//   entity.gameState = event.params.gameState;
-//   entity.save();
-// }
+      playerGame.save();
+    }
+    gameRoom.save();
+  }
+}

@@ -162,6 +162,19 @@ export class Game extends Entity {
   set actionCount(value: i32) {
     this.set("actionCount", Value.fromI32(value));
   }
+
+  get voteCount(): i32 {
+    let value = this.get("voteCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set voteCount(value: i32) {
+    this.set("voteCount", Value.fromI32(value));
+  }
 }
 
 export class PlayerGame extends Entity {
@@ -229,6 +242,19 @@ export class PlayerGame extends Entity {
     this.set("game", Value.fromString(value));
   }
 
+  get alive(): boolean {
+    let value = this.get("alive");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set alive(value: boolean) {
+    this.set("alive", Value.fromBoolean(value));
+  }
+
   get action(): boolean {
     let value = this.get("action");
     if (!value || value.kind == ValueKind.NULL) {
@@ -240,6 +266,19 @@ export class PlayerGame extends Entity {
 
   set action(value: boolean) {
     this.set("action", Value.fromBoolean(value));
+  }
+
+  get vote(): boolean {
+    let value = this.get("vote");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set vote(value: boolean) {
+    this.set("vote", Value.fromBoolean(value));
   }
 }
 

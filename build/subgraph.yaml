@@ -45,4 +45,10 @@ templates:
           handler: handleInitGame
         - event: Action(address,address[])
           handler: handleAction
+        - event: Voted(address,uint8,uint8)
+          handler: handleVote
+        - event: CheckMafia(bool)
+          handler: handleCheckMafia
+        - event: Killed(address)
+          handler: handleKilled
       file: templates\Mafia\Mafia.wasm

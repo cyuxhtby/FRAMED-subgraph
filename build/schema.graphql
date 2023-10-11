@@ -11,11 +11,14 @@ type Game @entity {
   Players: [PlayerGame!]! @derivedFrom(field: "game")
   size: Int!
   actionCount: Int!
+  voteCount: Int!
 }
 
 type PlayerGame @entity {
   id: ID!
   player: Player!
   game: Game!
+  alive: Boolean!
   action: Boolean!
+  vote: Boolean!
 }
