@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt,
+  BigInt
 } from "@graphprotocol/graph-ts";
 
 export class Action extends ethereum.Event {
@@ -518,7 +518,7 @@ export class Mafia extends ethereum.SmartContract {
       "hasTakenAction(uint8,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromAddress(param1)
       ]
     );
 
@@ -534,7 +534,7 @@ export class Mafia extends ethereum.SmartContract {
       "hasTakenAction(uint8,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromAddress(param1)
       ]
     );
     if (result.reverted) {
@@ -547,7 +547,7 @@ export class Mafia extends ethereum.SmartContract {
   hasVoted(param0: i32, param1: Address): boolean {
     let result = super.call("hasVoted", "hasVoted(uint8,address):(bool)", [
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-      ethereum.Value.fromAddress(param1),
+      ethereum.Value.fromAddress(param1)
     ]);
 
     return result[0].toBoolean();
@@ -556,7 +556,7 @@ export class Mafia extends ethereum.SmartContract {
   try_hasVoted(param0: i32, param1: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall("hasVoted", "hasVoted(uint8,address):(bool)", [
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-      ethereum.Value.fromAddress(param1),
+      ethereum.Value.fromAddress(param1)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -773,7 +773,7 @@ export class Mafia extends ethereum.SmartContract {
       "playerVoteCount(uint8,uint8):(uint8)",
       [
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
       ]
     );
 
@@ -786,7 +786,7 @@ export class Mafia extends ethereum.SmartContract {
       "playerVoteCount(uint8,uint8):(uint8)",
       [
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
       ]
     );
     if (result.reverted) {
@@ -833,7 +833,7 @@ export class Mafia extends ethereum.SmartContract {
 
   playersList(param0: BigInt): Address {
     let result = super.call("playersList", "playersList(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0),
+      ethereum.Value.fromUnsignedBigInt(param0)
     ]);
 
     return result[0].toAddress();
@@ -912,7 +912,7 @@ export class Mafia extends ethereum.SmartContract {
   viewCaught(publicKey: Bytes, signature: Bytes): Bytes {
     let result = super.call("viewCaught", "viewCaught(bytes32,bytes):(bytes)", [
       ethereum.Value.fromFixedBytes(publicKey),
-      ethereum.Value.fromBytes(signature),
+      ethereum.Value.fromBytes(signature)
     ]);
 
     return result[0].toBytes();
@@ -927,7 +927,7 @@ export class Mafia extends ethereum.SmartContract {
       "viewCaught(bytes32,bytes):(bytes)",
       [
         ethereum.Value.fromFixedBytes(publicKey),
-        ethereum.Value.fromBytes(signature),
+        ethereum.Value.fromBytes(signature)
       ]
     );
     if (result.reverted) {
@@ -943,7 +943,7 @@ export class Mafia extends ethereum.SmartContract {
       "viewOwnRole(bytes32,bytes):(bytes)",
       [
         ethereum.Value.fromFixedBytes(publicKey),
-        ethereum.Value.fromBytes(signature),
+        ethereum.Value.fromBytes(signature)
       ]
     );
 
@@ -959,7 +959,7 @@ export class Mafia extends ethereum.SmartContract {
       "viewOwnRole(bytes32,bytes):(bytes)",
       [
         ethereum.Value.fromFixedBytes(publicKey),
-        ethereum.Value.fromBytes(signature),
+        ethereum.Value.fromBytes(signature)
       ]
     );
     if (result.reverted) {

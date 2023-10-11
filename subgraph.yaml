@@ -2,13 +2,55 @@ specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
+  # - kind: ethereum
+  #   name: Mafia
+  #   network: inconetwork
+  #   source:
+  #     address: "0xd3cdd34c2E0521C8A80656548923300D988B5354"
+  #     abi: Mafia
+  #     startBlock: 181351
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.7
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Game
+  #       - Player
+  #     abis:
+  #       - name: Mafia
+  #         file: ./abis/Mafia.json
+  #     eventHandlers:
+  #       - event: JoinGame(address,address[])
+  #         handler: handleJoinGame
+  #       - event: InitGame(uint8)
+  #         handler: handleInitGame
+  #     file: ./src/mappings.ts
+  - kind: ethereum
+    name: Contract
+    network: inconetwork
+    source:
+      address: "0x2Cfa03ca98cda65aB803E676d97Aa22c156D03f3"
+      abi: Contract
+      startBlock: 181351
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - InitGame
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: InitGame(address,uint256)
+          handler: handleInitGame
+      file: ./src/contract.ts
+templates:
   - kind: ethereum
     name: Mafia
     network: inconetwork
     source:
-      address: "0xAC5f4E555c811d7C50790E0426B7354f652CF975"
       abi: Mafia
-      startBlock: 141092
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -22,5 +64,14 @@ dataSources:
       eventHandlers:
         - event: JoinGame(address,address[])
           handler: handleJoinGame
-
+        - event: InitGame(uint8)
+          handler: handleInitGame
+        - event: Action(address,address[])
+          handler: handleAction
+        - event: Voted(address,uint8,uint8)
+          handler: handleVote
+        - event: CheckMafia(bool)
+          handler: handleCheckMafia
+        - event: Killed(address)
+          handler: handleKilled
       file: ./src/mappings.ts

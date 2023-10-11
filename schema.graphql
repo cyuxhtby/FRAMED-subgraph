@@ -1,10 +1,24 @@
 type Player @entity {
   id: ID!
-  playerAddress: Bytes!
+  game: [PlayerGame!]! @derivedFrom(field: "player")
 }
 
 type Game @entity {
   id: ID!
-  address: Bytes!
-  players: [Player!]!
+  roomId: Int!
+  phase: Int!
+  creator: String!
+  Players: [PlayerGame!]! @derivedFrom(field: "game")
+  size: Int!
+  actionCount: Int!
+  voteCount: Int!
+}
+
+type PlayerGame @entity {
+  id: ID!
+  player: Player!
+  game: Game!
+  alive: Boolean!
+  action: Boolean!
+  vote: Boolean!
 }
