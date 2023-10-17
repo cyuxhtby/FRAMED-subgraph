@@ -23,6 +23,8 @@ import {
 export function handleJoinGame(event: JoinGameEvent): void {
   let player = Player.load(event.transaction.from.toHexString());
   let gameRoom = Game.load(event.address.toHexString());
+  let contract = Mafia.bind(event.address);
+  let playersArray = contract.getPlayersArray();
 
   if (gameRoom) {
     if (player) {
@@ -32,6 +34,7 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.position = playersArray.length - 1;
       playerGame.action = false;
       playerGame.alive = true;
       playerGame.vote = false;
@@ -44,6 +47,7 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.position = playersArray.length - 1;
       playerGame.action = false;
       playerGame.alive = true;
       playerGame.vote = false;
@@ -107,7 +111,7 @@ export function handleCheckMafia(event: CheckMafiaEvent): void {
       gameRoom.phase = 4;
     } else {
       gameRoom.phase = 1;
-      gameRoom.size--;
+
       gameRoom.voteCount = 0;
       gameRoom.actionCount = 0;
       let contract = Mafia.bind(event.address);
@@ -139,7 +143,9 @@ export function handleKilled(event: KilledEvent): void {
     let playerGame = PlayerGame.load(playerGameId);
     if (playerGame) {
       playerGame.alive = false;
-
+      gameRoom.size--;
+      playerGame.action = false;
+      playerGame.vote = false;
       playerGame.save();
     }
     gameRoom.save();

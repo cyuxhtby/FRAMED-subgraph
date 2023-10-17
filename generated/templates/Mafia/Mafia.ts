@@ -1001,6 +1001,10 @@ export class ConstructorCall__Inputs {
   constructor(call: ConstructorCall) {
     this._call = call;
   }
+
+  get _creator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -1168,6 +1172,10 @@ export class JoinGameCall__Inputs {
 
   constructor(call: JoinGameCall) {
     this._call = call;
+  }
+
+  get _address(): Address {
+    return this._call.inputValues[0].value.toAddress();
   }
 }
 

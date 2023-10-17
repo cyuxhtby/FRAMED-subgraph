@@ -216,6 +216,19 @@ export class PlayerGame extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get position(): i32 {
+    let value = this.get("position");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set position(value: i32) {
+    this.set("position", Value.fromI32(value));
+  }
+
   get player(): string {
     let value = this.get("player");
     if (!value || value.kind == ValueKind.NULL) {

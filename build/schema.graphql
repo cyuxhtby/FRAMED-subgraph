@@ -16,6 +16,7 @@ type Game @entity {
 
 type PlayerGame @entity {
   id: ID!
+  position: Int!
   player: Player!
   game: Game!
   alive: Boolean!
