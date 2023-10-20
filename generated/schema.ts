@@ -175,6 +175,19 @@ export class Game extends Entity {
   set voteCount(value: i32) {
     this.set("voteCount", Value.fromI32(value));
   }
+
+  get winner(): i32 {
+    let value = this.get("winner");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set winner(value: i32) {
+    this.set("winner", Value.fromI32(value));
+  }
 }
 
 export class PlayerGame extends Entity {
@@ -214,6 +227,19 @@ export class PlayerGame extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get position(): i32 {
+    let value = this.get("position");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set position(value: i32) {
+    this.set("position", Value.fromI32(value));
   }
 
   get player(): string {

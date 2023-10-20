@@ -12,10 +12,12 @@ type Game @entity {
   size: Int!
   actionCount: Int!
   voteCount: Int!
+  winner: Int!
 }
 
 type PlayerGame @entity {
   id: ID!
+  position: Int!
   player: Player!
   game: Game!
   alive: Boolean!

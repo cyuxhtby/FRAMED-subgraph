@@ -8,8 +8,9 @@ import {
   Killed as KilledEvent,
   NewState as NewStateEvent,
   Voted as VotedEvent,
+  MafiaWin as MafiaWinEvent,
   Mafia,
-} from "../generated/Mafia/Mafia";
+} from "../generated/templates/Mafia/Mafia";
 import {
   // JoinGame,
   Player,
@@ -23,6 +24,8 @@ import {
 export function handleJoinGame(event: JoinGameEvent): void {
   let player = Player.load(event.transaction.from.toHexString());
   let gameRoom = Game.load(event.address.toHexString());
+  let contract = Mafia.bind(event.address);
+  let playersArray = contract.getPlayersArray();
 
   if (gameRoom) {
     if (player) {
@@ -32,6 +35,7 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.position = playersArray.length - 1;
       playerGame.action = false;
       playerGame.alive = true;
       playerGame.vote = false;
@@ -44,6 +48,7 @@ export function handleJoinGame(event: JoinGameEvent): void {
       let playerGame = new PlayerGame(playerGameId);
       playerGame.player = player.id;
       playerGame.game = gameRoom.id;
+      playerGame.position = playersArray.length - 1;
       playerGame.action = false;
       playerGame.alive = true;
       playerGame.vote = false;
@@ -107,7 +112,7 @@ export function handleCheckMafia(event: CheckMafiaEvent): void {
       gameRoom.phase = 4;
     } else {
       gameRoom.phase = 1;
-      gameRoom.size--;
+
       gameRoom.voteCount = 0;
       gameRoom.actionCount = 0;
       let contract = Mafia.bind(event.address);
@@ -132,16 +137,28 @@ export function handleCheckMafia(event: CheckMafiaEvent): void {
 
 export function handleKilled(event: KilledEvent): void {
   let gameRoom = Game.load(event.address.toHexString());
-  let player = Player.load(event.params._playerKilled.toHexString());
+  let player = Player.load(event.params._playerAddress.toHexString());
 
   if (gameRoom && player) {
     let playerGameId = player.id.concat("-").concat(gameRoom.roomId.toString());
     let playerGame = PlayerGame.load(playerGameId);
     if (playerGame) {
       playerGame.alive = false;
-
+      gameRoom.size--;
+      playerGame.action = false;
+      playerGame.vote = false;
       playerGame.save();
     }
+    gameRoom.save();
+  }
+}
+
+export function handleMafiaWin(event: MafiaWinEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+
+  if (gameRoom) {
+    gameRoom.winner = 1;
+    gameRoom.phase = 4;
     gameRoom.save();
   }
 }

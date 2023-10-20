@@ -157,8 +157,26 @@ export class Killed__Params {
     this._event = event;
   }
 
-  get _playerKilled(): Address {
+  get _playerAddress(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class MafiaWin extends ethereum.Event {
+  get params(): MafiaWin__Params {
+    return new MafiaWin__Params(this);
+  }
+}
+
+export class MafiaWin__Params {
+  _event: MafiaWin;
+
+  constructor(event: MafiaWin) {
+    this._event = event;
+  }
+
+  get mafiaWin(): boolean {
+    return this._event.parameters[0].value.toBoolean();
   }
 }
 
@@ -653,6 +671,25 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
+  joinedGame(param0: Address): boolean {
+    let result = super.call("joinedGame", "joinedGame(address):(bool)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_joinedGame(param0: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall("joinedGame", "joinedGame(address):(bool)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   killedPlayerId(): BigInt {
     let result = super.call("killedPlayerId", "killedPlayerId():(uint256)", []);
 
@@ -708,6 +745,21 @@ export class Mafia extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  playerCount(): i32 {
+    let result = super.call("playerCount", "playerCount():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_playerCount(): ethereum.CallResult<i32> {
+    let result = super.tryCall("playerCount", "playerCount():(uint8)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   playerIdWithLargestVoteCount(): i32 {
@@ -875,6 +927,40 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  roles(param0: BigInt): BigInt {
+    let result = super.call("roles", "roles(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_roles(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("roles", "roles(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  roundCount(): i32 {
+    let result = super.call("roundCount", "roundCount():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_roundCount(): ethereum.CallResult<i32> {
+    let result = super.tryCall("roundCount", "roundCount():(uint8)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   savedPlayerId(): BigInt {
     let result = super.call("savedPlayerId", "savedPlayerId():(uint256)", []);
 
@@ -1001,38 +1087,16 @@ export class ConstructorCall__Inputs {
   constructor(call: ConstructorCall) {
     this._call = call;
   }
+
+  get _creator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class _resetDayCall extends ethereum.Call {
-  get inputs(): _resetDayCall__Inputs {
-    return new _resetDayCall__Inputs(this);
-  }
-
-  get outputs(): _resetDayCall__Outputs {
-    return new _resetDayCall__Outputs(this);
-  }
-}
-
-export class _resetDayCall__Inputs {
-  _call: _resetDayCall;
-
-  constructor(call: _resetDayCall) {
-    this._call = call;
-  }
-}
-
-export class _resetDayCall__Outputs {
-  _call: _resetDayCall;
-
-  constructor(call: _resetDayCall) {
     this._call = call;
   }
 }
@@ -1097,32 +1161,6 @@ export class CastVoteCall__Outputs {
   }
 }
 
-export class CheckIfMafiaKilledCall extends ethereum.Call {
-  get inputs(): CheckIfMafiaKilledCall__Inputs {
-    return new CheckIfMafiaKilledCall__Inputs(this);
-  }
-
-  get outputs(): CheckIfMafiaKilledCall__Outputs {
-    return new CheckIfMafiaKilledCall__Outputs(this);
-  }
-}
-
-export class CheckIfMafiaKilledCall__Inputs {
-  _call: CheckIfMafiaKilledCall;
-
-  constructor(call: CheckIfMafiaKilledCall) {
-    this._call = call;
-  }
-}
-
-export class CheckIfMafiaKilledCall__Outputs {
-  _call: CheckIfMafiaKilledCall;
-
-  constructor(call: CheckIfMafiaKilledCall) {
-    this._call = call;
-  }
-}
-
 export class InitializeGameCall extends ethereum.Call {
   get inputs(): InitializeGameCall__Inputs {
     return new InitializeGameCall__Inputs(this);
@@ -1138,10 +1176,6 @@ export class InitializeGameCall__Inputs {
 
   constructor(call: InitializeGameCall) {
     this._call = call;
-  }
-
-  get roles(): Array<Bytes> {
-    return this._call.inputValues[0].value.toBytesArray();
   }
 }
 
@@ -1169,38 +1203,16 @@ export class JoinGameCall__Inputs {
   constructor(call: JoinGameCall) {
     this._call = call;
   }
+
+  get _address(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
 export class JoinGameCall__Outputs {
   _call: JoinGameCall;
 
   constructor(call: JoinGameCall) {
-    this._call = call;
-  }
-}
-
-export class RevealNextDayCall extends ethereum.Call {
-  get inputs(): RevealNextDayCall__Inputs {
-    return new RevealNextDayCall__Inputs(this);
-  }
-
-  get outputs(): RevealNextDayCall__Outputs {
-    return new RevealNextDayCall__Outputs(this);
-  }
-}
-
-export class RevealNextDayCall__Inputs {
-  _call: RevealNextDayCall;
-
-  constructor(call: RevealNextDayCall) {
-    this._call = call;
-  }
-}
-
-export class RevealNextDayCall__Outputs {
-  _call: RevealNextDayCall;
-
-  constructor(call: RevealNextDayCall) {
     this._call = call;
   }
 }

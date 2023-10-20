@@ -29,9 +29,9 @@ dataSources:
     name: Contract
     network: inconetwork
     source:
-      address: "0x2Cfa03ca98cda65aB803E676d97Aa22c156D03f3"
+      address: "0x6BDcF89Afde16d49264184f08C797e9C42d9fb30"
       abi: Contract
-      startBlock: 181351
+      startBlock: 121224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -74,4 +74,6 @@ templates:
           handler: handleCheckMafia
         - event: Killed(address)
           handler: handleKilled
+        - event: MafiaWin(bool)
+          handler: handleMafiaWin
       file: ./src/mappings.ts
