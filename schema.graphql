@@ -12,6 +12,7 @@ type Game @entity {
   size: Int!
   actionCount: Int!
   voteCount: Int!
+  winner: Int!
 }
 
 type PlayerGame @entity {

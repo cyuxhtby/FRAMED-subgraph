@@ -8,8 +8,9 @@ import {
   Killed as KilledEvent,
   NewState as NewStateEvent,
   Voted as VotedEvent,
+  MafiaWin as MafiaWinEvent,
   Mafia,
-} from "../generated/Mafia/Mafia";
+} from "../generated/templates/Mafia/Mafia";
 import {
   // JoinGame,
   Player,
@@ -136,7 +137,7 @@ export function handleCheckMafia(event: CheckMafiaEvent): void {
 
 export function handleKilled(event: KilledEvent): void {
   let gameRoom = Game.load(event.address.toHexString());
-  let player = Player.load(event.params._playerKilled.toHexString());
+  let player = Player.load(event.params._playerAddress.toHexString());
 
   if (gameRoom && player) {
     let playerGameId = player.id.concat("-").concat(gameRoom.roomId.toString());
@@ -148,6 +149,16 @@ export function handleKilled(event: KilledEvent): void {
       playerGame.vote = false;
       playerGame.save();
     }
+    gameRoom.save();
+  }
+}
+
+export function handleMafiaWin(event: MafiaWinEvent): void {
+  let gameRoom = Game.load(event.address.toHexString());
+
+  if (gameRoom) {
+    gameRoom.winner = 1;
+    gameRoom.phase = 4;
     gameRoom.save();
   }
 }

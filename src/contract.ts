@@ -22,5 +22,6 @@ export function handleInitGame(event: InitGameEvent): void {
   gameRoom.roomId = event.params.roomId.toI32();
   gameRoom.actionCount = 0;
   gameRoom.voteCount = 0;
+  gameRoom.winner = 0;
   gameRoom.save();
 }
