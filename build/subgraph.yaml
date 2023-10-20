@@ -6,7 +6,7 @@ dataSources:
     name: Contract
     network: inconetwork
     source:
-      address: "0x6BDcF89Afde16d49264184f08C797e9C42d9fb30"
+      address: "0xA95FE66beecBe8cBEeF30d91A9F27506d071f80e"
       abi: Contract
       startBlock: 121224
     mapping:
