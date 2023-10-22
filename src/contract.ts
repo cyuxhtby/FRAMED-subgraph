@@ -14,8 +14,8 @@ import {
 export function handleInitGame(event: InitGameEvent): void {
   // let context = new DataSourceContext();
   // context.setBigInt("roomId", event.params.roomId);
-  Mafia.create(event.params.room);
-  let gameRoom = new Game(event.params.room.toHexString());
+  Mafia.create(event.params.mafiaGame);
+  let gameRoom = new Game(event.params.mafiaGame.toHexString());
   gameRoom.phase = 0;
   gameRoom.size = 4;
   gameRoom.creator = event.transaction.from.toHexString();

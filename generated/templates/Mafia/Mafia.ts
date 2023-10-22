@@ -1055,6 +1055,25 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  viewRole(position: i32): i32 {
+    let result = super.call("viewRole", "viewRole(uint8):(uint8)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(position))
+    ]);
+
+    return result[0].toI32();
+  }
+
+  try_viewRole(position: i32): ethereum.CallResult<i32> {
+    let result = super.tryCall("viewRole", "viewRole(uint8):(uint8)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(position))
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   voteCount(): i32 {
     let result = super.call("voteCount", "voteCount():(uint8)", []);
 
