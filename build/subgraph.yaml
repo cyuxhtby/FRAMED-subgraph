@@ -6,9 +6,9 @@ dataSources:
     name: Contract
     network: inconetwork
     source:
-      address: "0x6BDcF89Afde16d49264184f08C797e9C42d9fb30"
+      address: "0x7Ff8a00469557d8485898D9a4fe9737aA9332127"
       abi: Contract
-      startBlock: 121224
+      startBlock: 181647
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -19,7 +19,7 @@ dataSources:
         - name: Contract
           file: Contract/abis/Contract.json
       eventHandlers:
-        - event: InitGame(address,uint256)
+        - event: InitGame(address,address,uint256)
           handler: handleInitGame
       file: Contract/Contract.wasm
 templates:
