@@ -421,21 +421,6 @@ export class Mafia extends ethereum.SmartContract {
     return new Mafia("Mafia", address);
   }
 
-  MAX_PLAYERS(): i32 {
-    let result = super.call("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
-
-    return result[0].toI32();
-  }
-
-  try_MAX_PLAYERS(): ethereum.CallResult<i32> {
-    let result = super.tryCall("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
   actionCount(): i32 {
     let result = super.call("actionCount", "actionCount():(uint8)", []);
 
@@ -732,6 +717,21 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
+  MAX_PLAYERS(): i32 {
+    let result = super.call("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_MAX_PLAYERS(): ethereum.CallResult<i32> {
+    let result = super.tryCall("MAX_PLAYERS", "MAX_PLAYERS():(uint8)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   owner(): Address {
     let result = super.call("owner", "owner():(address)", []);
 
@@ -819,35 +819,6 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  playerVoteCount(param0: i32, param1: i32): i32 {
-    let result = super.call(
-      "playerVoteCount",
-      "playerVoteCount(uint8,uint8):(uint8)",
-      [
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
-      ]
-    );
-
-    return result[0].toI32();
-  }
-
-  try_playerVoteCount(param0: i32, param1: i32): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "playerVoteCount",
-      "playerVoteCount(uint8,uint8):(uint8)",
-      [
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
   players(param0: Address): Mafia__playersResult {
     let result = super.call(
       "players",
@@ -927,6 +898,35 @@ export class Mafia extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  playerVoteCount(param0: i32, param1: i32): i32 {
+    let result = super.call(
+      "playerVoteCount",
+      "playerVoteCount(uint8,uint8):(uint8)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+      ]
+    );
+
+    return result[0].toI32();
+  }
+
+  try_playerVoteCount(param0: i32, param1: i32): ethereum.CallResult<i32> {
+    let result = super.tryCall(
+      "playerVoteCount",
+      "playerVoteCount(uint8,uint8):(uint8)",
+      [
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param0)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param1))
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   roles(param0: BigInt): BigInt {
     let result = super.call("roles", "roles(uint256):(uint256)", [
       ethereum.Value.fromUnsignedBigInt(param0)
@@ -944,6 +944,21 @@ export class Mafia extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  rolesCount(): i32 {
+    let result = super.call("rolesCount", "rolesCount():(uint8)", []);
+
+    return result[0].toI32();
+  }
+
+  try_rolesCount(): ethereum.CallResult<i32> {
+    let result = super.tryCall("rolesCount", "rolesCount():(uint8)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   roundCount(): i32 {
@@ -1090,36 +1105,6 @@ export class Mafia extends ethereum.SmartContract {
   }
 }
 
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-
-  get _creator(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
 export class ActionCall extends ethereum.Call {
   get inputs(): ActionCall__Inputs {
     return new ActionCall__Inputs(this);
@@ -1180,28 +1165,32 @@ export class CastVoteCall__Outputs {
   }
 }
 
-export class GenerateUniqueRoleCall extends ethereum.Call {
-  get inputs(): GenerateUniqueRoleCall__Inputs {
-    return new GenerateUniqueRoleCall__Inputs(this);
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
   }
 
-  get outputs(): GenerateUniqueRoleCall__Outputs {
-    return new GenerateUniqueRoleCall__Outputs(this);
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
   }
 }
 
-export class GenerateUniqueRoleCall__Inputs {
-  _call: GenerateUniqueRoleCall;
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
 
-  constructor(call: GenerateUniqueRoleCall) {
+  constructor(call: ConstructorCall) {
     this._call = call;
   }
+
+  get _creator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
-export class GenerateUniqueRoleCall__Outputs {
-  _call: GenerateUniqueRoleCall;
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
 
-  constructor(call: GenerateUniqueRoleCall) {
+  constructor(call: ConstructorCall) {
     this._call = call;
   }
 }
@@ -1258,6 +1247,32 @@ export class JoinGameCall__Outputs {
   _call: JoinGameCall;
 
   constructor(call: JoinGameCall) {
+    this._call = call;
+  }
+}
+
+export class GenerateUniqueRoleCall extends ethereum.Call {
+  get inputs(): GenerateUniqueRoleCall__Inputs {
+    return new GenerateUniqueRoleCall__Inputs(this);
+  }
+
+  get outputs(): GenerateUniqueRoleCall__Outputs {
+    return new GenerateUniqueRoleCall__Outputs(this);
+  }
+}
+
+export class GenerateUniqueRoleCall__Inputs {
+  _call: GenerateUniqueRoleCall;
+
+  constructor(call: GenerateUniqueRoleCall) {
+    this._call = call;
+  }
+}
+
+export class GenerateUniqueRoleCall__Outputs {
+  _call: GenerateUniqueRoleCall;
+
+  constructor(call: GenerateUniqueRoleCall) {
     this._call = call;
   }
 }

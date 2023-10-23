@@ -29,7 +29,7 @@ dataSources:
     name: Contract
     network: inconetwork
     source:
-      address: "0x20fE7A4197D5fe9631cA672F900421BbE9977d91"
+      address: "0x004cb0A9fbB32468aF5a76e85F0F97101f294093"
       abi: Contract
       startBlock: 181647
     mapping:
