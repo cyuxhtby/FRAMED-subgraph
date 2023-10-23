@@ -1180,6 +1180,32 @@ export class CastVoteCall__Outputs {
   }
 }
 
+export class GenerateUniqueRoleCall extends ethereum.Call {
+  get inputs(): GenerateUniqueRoleCall__Inputs {
+    return new GenerateUniqueRoleCall__Inputs(this);
+  }
+
+  get outputs(): GenerateUniqueRoleCall__Outputs {
+    return new GenerateUniqueRoleCall__Outputs(this);
+  }
+}
+
+export class GenerateUniqueRoleCall__Inputs {
+  _call: GenerateUniqueRoleCall;
+
+  constructor(call: GenerateUniqueRoleCall) {
+    this._call = call;
+  }
+}
+
+export class GenerateUniqueRoleCall__Outputs {
+  _call: GenerateUniqueRoleCall;
+
+  constructor(call: GenerateUniqueRoleCall) {
+    this._call = call;
+  }
+}
+
 export class InitializeGameCall extends ethereum.Call {
   get inputs(): InitializeGameCall__Inputs {
     return new InitializeGameCall__Inputs(this);
