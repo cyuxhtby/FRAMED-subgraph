@@ -23,12 +23,16 @@ export class InitGame__Params {
     this._event = event;
   }
 
-  get room(): Address {
+  get creator(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
+  get mafiaGame(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get roomId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
